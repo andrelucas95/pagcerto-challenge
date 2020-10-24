@@ -1,0 +1,62 @@
+# System files
+.DS_Store?
+Thumbs.db
+
+# Package files
+*.nupkg
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Editor directories and files
+.idea
+.vs
+.vscode
+*.ntvs*
+*.njsproj
+*.suo
+*.sw?
+*.user
+UpgradeLog.XML
+_UpgradeReport_Files/
+/_ReSharper.*
+*.ReSharper.*
+
+# Compiled source
+*.cache
+*.com
+*.class
+*.dll
+*.dll.config
+*.exe
+*.pdb
+
+# Log files
+*.log
+*.sqlite
+
+# Local env files
+.env.local
+.env.*.local
+app.json
+!**/*Tests/appsettings.json
+ocelot.json
+
+# Project directories
+packages/
+bin/
+obj/
+temp/
+dist/
+mock/
+wwwroot/
+publish/
+Properties/
+Settings/
+TestResults/
+coverage/
