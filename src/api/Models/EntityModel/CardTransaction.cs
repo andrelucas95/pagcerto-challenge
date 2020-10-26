@@ -6,6 +6,16 @@ namespace api.Models.EntityModel
 {
     public class CardTransaction : Entity, IAggregateRoot
     {
+        protected CardTransaction() { }
+
+        public CardTransaction(string cardNumber, decimal amount)
+        {
+            Nsu = Id.GetHashCode();
+            CardFinal = cardNumber.Substring(12);
+            GrossAmount = amount;
+            Installments = new List<Installment>();
+        }
+
         public int Nsu { get; private set; }
         public DateTime? ApprovedAt { get; private set; }
         public DateTime? ReprovedAt { get; private set; }
@@ -17,16 +27,6 @@ namespace api.Models.EntityModel
         public ICollection<Installment> Installments { get; private set; }
         public int InstallmentsCount => Installments.Count;
         public string CardFinal { get; set; }
-
-        protected CardTransaction() { }
-
-        public CardTransaction(string cardNumber, decimal amount)
-        {
-            Nsu = Id.GetHashCode();
-            CardFinal = cardNumber.Substring(12);
-            GrossAmount = amount;
-            Installments = new List<Installment>();
-        }
 
         public void Approve()
         {
