@@ -26,7 +26,7 @@ namespace api.Models.EntityModel
         public decimal Fee { get; private set; }
         public ICollection<Installment> Installments { get; private set; }
         public int InstallmentsCount => Installments.Count;
-        public string CardFinal { get; set; }
+        public string CardFinal { get; private set; }
 
         public void Approve()
         {
