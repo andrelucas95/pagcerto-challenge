@@ -16,5 +16,14 @@ namespace api.Models.EntityModel
         public DateTime? TransferedAt { get; private set; }
 
         protected Installment() { }
+
+        public Installment(int number, decimal grossAmount, decimal netAmount, DateTime receiptDate)
+        {
+            Key = Id.GetHashCode();
+            Number = number;
+            GrossAmount = grossAmount;
+            NetAmount = netAmount;
+            ReceiptDate = receiptDate;
+        }
     }
 }
