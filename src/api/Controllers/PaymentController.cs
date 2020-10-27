@@ -26,6 +26,7 @@ namespace api.Controllers
         }
 
         [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [HttpGet, Route("partner/transactions/{nsu:int}")]
         public async Task<IActionResult> Find([FromRoute] int nsu)
@@ -34,6 +35,8 @@ namespace api.Controllers
                 .IncludeInstallments()
                 .WhereNsu(nsu)
                 .SingleOrDefaultAsync();
+
+            if (cardTransaction == null) return NotFound();
 
             return Ok(new CardTransactionResultJson(cardTransaction));
         }
