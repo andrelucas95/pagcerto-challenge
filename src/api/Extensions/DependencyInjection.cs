@@ -1,6 +1,7 @@
 using api.Infrastructure;
 using api.Infrastructure.Repositories;
 using api.Models.EntityModel.Core;
+using api.Models.IntegrationModel;
 using api.Models.ServiceModel;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,9 @@ namespace api.Extensions
             
             //Repositories
             services.AddScoped<ICardTransactionRepository, CardTransactionRepository>();
+
+            //Apis
+            services.AddScoped<IAcquirerApi, CieloApi>();
 
             //Services
             services.AddScoped<PaymentProcessing>();

@@ -45,9 +45,10 @@ namespace api.Controllers
         public async Task<IActionResult> Create(
             [FromBody] CreatePaymentViewModel model)
         {
-            await _paymentProcessing.Process(model.CardNumber, model.Installments.Value, model.Amount.Value);
+            await _paymentProcessing.Process(model.ToCardPayment());
 
-            if (_paymentProcessing.HasErrors()) return new ProcessingErrorResultJson(_paymentProcessing.ValidationResult);
+            if (_paymentProcessing.Reproved)
+                return new CardTransactionReprovedError();
 
             return Ok(new CardTransactionResultJson(_paymentProcessing.CardTransaction));
         }
