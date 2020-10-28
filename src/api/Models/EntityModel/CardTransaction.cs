@@ -10,7 +10,7 @@ namespace api.Models.EntityModel
 
         public CardTransaction(string cardNumber, decimal amount)
         {
-            Nsu = Id.GetHashCode();
+            Nsu = Math.Abs(Id.GetHashCode());
             CardFinal = cardNumber.Substring(12);
             GrossAmount = amount;
             Installments = new List<Installment>();

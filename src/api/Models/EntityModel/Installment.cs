@@ -9,7 +9,7 @@ namespace api.Models.EntityModel
 
         public Installment(int number, decimal grossAmount, decimal netAmount, DateTime receiptDate)
         {
-            Key = Id.GetHashCode();
+            Key = Math.Abs(Id.GetHashCode());
             Number = number;
             GrossAmount = grossAmount;
             NetAmount = netAmount;
