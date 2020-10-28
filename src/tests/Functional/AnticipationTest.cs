@@ -33,5 +33,29 @@ namespace tests.Functional
             Assert.Equal(result, false);
             Assert.Equal(requestAnticipationProcessing.InProgess, true);
         }
+
+        [Fact]
+        public async Task ShouldBeTransactionAlreadyAnalized()
+        {
+            var paymentProcessing = new PaymentProcessing(_server.cardTransactionRepository, _server.acquirerApi);
+            var requestAnticipationProcessing = new RequestAnticipationProcessing(_server.cardTransactionRepository);
+            var anticipationAnalysisProcessing = new AnticipationAnalysisProcessing(_server.cardTransactionRepository);
+            
+            await paymentProcessing.Process(new CardPayment().Build().WithValidCardNumber());
+
+            var transaction = paymentProcessing.CardTransaction;
+
+            await requestAnticipationProcessing.Process(new List<int>() { transaction.Nsu });
+
+            requestAnticipationProcessing.Anticipation.StartAttendance();
+            await _server.cardTransactionRepository.UnitOfWork.Commit();
+            
+            await anticipationAnalysisProcessing.Approve(new List<int>() { transaction.Nsu });
+
+            var result = await requestAnticipationProcessing.Process(new List<int>() { transaction.Nsu });
+
+            Assert.Equal(result, false);
+            Assert.Equal(requestAnticipationProcessing.AlreadyRequestedAnticipation, true);
+        }
     }
 }
