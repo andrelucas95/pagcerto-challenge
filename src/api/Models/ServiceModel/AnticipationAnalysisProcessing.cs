@@ -42,6 +42,8 @@ namespace api.Models.ServiceModel
 
         public async Task<bool> Reprove(List<int> cardTransactionsNsus)
         {
+            TransactionsRequested = cardTransactionsNsus;
+
             await GetAnticipation();
 
             if (NotFound) return false;
