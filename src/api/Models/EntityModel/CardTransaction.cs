@@ -19,7 +19,7 @@ namespace api.Models.EntityModel
         public int Nsu { get; private set; }
         public DateTime? ApprovedAt { get; private set; }
         public DateTime? ReprovedAt { get; private set; }
-        public bool Anticipated { get; private set; }
+        public bool? Anticipated { get; private set; }
         public bool AcquirerConfirmation { get; private set; }
         public decimal GrossAmount { get; private set; }
         public decimal NetAmount { get; private set; }
@@ -41,6 +41,10 @@ namespace api.Models.EntityModel
         }
 
         public bool IsApproved() => ApprovedAt != null;
+
+        public bool AlreadyRequestedAnticipation() => Anticipated.HasValue;
+
+        public bool IsAnticipated() => Anticipated.HasValue && Anticipated.Value;
 
         public void ChargeFee(decimal fee)
         {
@@ -66,5 +70,13 @@ namespace api.Models.EntityModel
                     ApprovedAt.Value.AddDays(installmentNumber * 30)));
             }
         }
+
+        public void ApproveAnticipation()
+        {
+            Anticipated = true;
+            foreach (Installment i in Installments) { i.ApplyAnticipationFee(); }
+        }
+
+        public void ReproveAnticipation() => Anticipated = false;
     }
 }

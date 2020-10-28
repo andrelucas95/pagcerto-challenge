@@ -15,5 +15,11 @@ namespace api.Infrastructure.Queries
         {
             return cardTransactions.Where(ct => ct.Nsu == nsu);
         }
+
+        public static IQueryable<CardTransaction> WhereAvailableForAnticipation(this IQueryable<CardTransaction> cardTransactions)
+        {
+            return cardTransactions.Where(ct => ct.Anticipated == null);
+        }
+
     }
 }

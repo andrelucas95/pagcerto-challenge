@@ -32,7 +32,7 @@ namespace api.Models.ResultModel
         public decimal NetAmount { get; set; }
         public decimal Fee { get; set; }
         public string CardFinal { get; set; }
-        public bool Anticipated { get; set; }
+        public bool? Anticipated { get; set; }
         public bool AcquirerConfirmation { get; private set; }
         public List<InstallmentResultJson> Installments { get; set; }
 

@@ -11,6 +11,7 @@ namespace api.Infrastructure
 
         public DbSet<CardTransaction> CardTransctions { get; set; }
         public DbSet<Installment> Installments { get; set; }
+        public DbSet<Anticipation> Anticipations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

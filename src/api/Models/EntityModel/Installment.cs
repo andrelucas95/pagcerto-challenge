@@ -25,5 +25,12 @@ namespace api.Models.EntityModel
         public decimal? AnticipatedValue { get; private set; }
         public DateTime ReceiptDate { get; private set; }
         public DateTime? TransferedAt { get; private set; }
+
+        public void ApplyAnticipationFee()
+        {
+            AnticipatedValue = NetAmount - (3.8M * (NetAmount / 100));
+        }
+
+        public void Transfer() => TransferedAt = DateTime.Now;
     }
 }

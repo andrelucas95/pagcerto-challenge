@@ -22,6 +22,8 @@ namespace api.Extensions
 
             //Services
             services.AddScoped<PaymentProcessing>();
+            services.AddScoped<RequestAnticipationProcessing>();
+            services.AddScoped<AnticipationAnalysisProcessing>();
         }
     }
 }
