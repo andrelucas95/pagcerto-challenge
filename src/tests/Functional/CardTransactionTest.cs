@@ -27,5 +27,18 @@ namespace tests.Functional
             Assert.Equal(paymentProcessing.Reproved, true);
             Assert.Equal(paymentProcessing.CardTransaction.Installments.Count, 0);
         }
+
+        [Fact]
+        public async Task ShouldBeApproved()
+        {
+            var paymentProcessing = new PaymentProcessing(_server.cardTransactionRepository, _server.acquirerApi);
+            var cardPayment = new CardPayment().Build().WithValidCardNumber();
+            
+            var result = await paymentProcessing.Process(cardPayment);
+
+            Assert.Equal(result, true);
+            Assert.Equal(paymentProcessing.CardTransaction.Installments.Count, cardPayment.Installments);
+            Assert.Equal(paymentProcessing.CardTransaction.Fee, 0.9M);
+        }
     }
 }
