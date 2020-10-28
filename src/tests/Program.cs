@@ -1,26 +1,42 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.FileProviders;
 
 namespace tests
 {
-    public class Program
+    public sealed class Program
     {
-        public static void Main(string[] args)
+        private readonly IConfiguration _configuration;
+
+        public Program()
         {
-            CreateHostBuilder(args).Build().Run();
+            BuildPath = Path.Combine("bin", "Debug", "netcoreapp3.1");
+            ProjectPath = AppContext.BaseDirectory.Replace(BuildPath, string.Empty);
+            ContentPath = ProjectPath.Replace("Tests", "API");
+
+            _configuration = new ConfigurationBuilder()
+                .SetBasePath(ProjectPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: false)
+                .Build();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+        public string BuildPath { get; }
+        public string ProjectPath { get; }
+        public string ContentPath { get; }
+
+        public IWebHostBuilder CreateWebHostBuilder() => new WebHostBuilder()
+            .UseStartup<Startup>()
+            .UseEnvironment("Testing")
+            .ConfigureAppConfiguration((builder, config) =>
+            {
+                builder.HostingEnvironment.ContentRootPath = ProjectPath;
+                builder.HostingEnvironment.WebRootPath = ContentPath;
+                builder.HostingEnvironment.ContentRootFileProvider = new PhysicalFileProvider(ProjectPath);
+                builder.HostingEnvironment.WebRootFileProvider = new PhysicalFileProvider(ContentPath);
+
+                config.AddConfiguration(_configuration);
+            });
     }
 }

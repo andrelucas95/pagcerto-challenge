@@ -1,15 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using api.Infrastructure;
+using api.Models.EntityModel.Core;
+using api.Models.IntegrationModel;
+using api.Models.ServiceModel;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using tests.Fakes;
 
 namespace tests
 {
@@ -22,13 +22,29 @@ namespace tests
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<PaymentDbContext>(options =>
+            {
+                options.UseInMemoryDatabase(Guid.NewGuid().ToString());
+            });
+
             services.AddControllers();
+
+            services.AddSingleton<PaymentDbContext>();
+            
+            //Repositories
+            services.AddScoped<ICardTransactionRepository, FakeCardTransactionRepository>();
+
+            //Apis
+            services.AddScoped<IAcquirerApi, FakeAcquirerApi>();
+
+            //Services
+            services.AddScoped<PaymentProcessing>();
+            services.AddScoped<RequestAnticipationProcessing>();
+            services.AddScoped<AnticipationAnalysisProcessing>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

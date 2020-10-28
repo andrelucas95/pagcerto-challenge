@@ -28,7 +28,11 @@ namespace api.Models.ServiceModel
 
             Reproved = !CardTransaction.IsApproved();
 
-            if (Reproved) return false;
+            if (Reproved)
+            {
+                await Save();
+                return false;
+            }
 
             CardTransaction.ChargeFee(Fee);
             CardTransaction.AddInstallments(cardPayment.Installments);
